@@ -6,13 +6,26 @@ from django.shortcuts import get_object_or_404
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        # fields = '__all__'
+        fields = [
+            'id_user','role','first_name','last_name','gmail'
+        ]
     
     def create(self, validated_data):
         # kiem tra du lieu id nay da ton tai hay chua
-        if User.objects.filter(id_user = validated_data['id_user']).exists():
+        if User.objects.filter(id_user = validated_data.get['id_user']).exists():
             raise ValidationError('User already exists')
         return User.objects.create(**validated_data)
+    
+    # def update(self, instance, validated_data):
+    #     if User.objects.filter(id_user = validated_data.get['id_user']).exists():
+    #         # raise ValidationError('User already exists')
+    #         instance.id_user = validated_data.get('id_user',  instance.name)
+    #         instance.role = validated_data.get('role', instance.role)
+    #         instance.first_name = validated_data.get('first_name', instance.first_name)
+    #         instance.last_name  = validated_data.get('last_name', instance.last_name)
+    #         return instance
+    #     return User.objects.create(**validated_data)
         
 class SubjectPreSerializer(serializers.ModelSerializer):
     class Meta:

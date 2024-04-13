@@ -30,6 +30,18 @@ class UserCreateAPIViewDetail(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
+    def delete(self, request, pk):
+        user = self.get_object(pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def put(self, request, pk):
+        user = self.get_object(pk)
+        serializer = UserSerializer(user, data=request.data, pardir= True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class CurriculumListView(APIView):
     def get(self, request):
         curriculum = Curriculum.objects.all()
@@ -60,14 +72,14 @@ class CurriculumDetailView(APIView):
         curriculum.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    def put(self, request, pk):
-        # logic co thi thay doi khong co thi them vao du lieu day 
-        curriculum = self.get_object(pk)
-        serializer = CurriculumSerializer(curriculum, data=request.data, partial = True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def put(self, request, pk):
+    #     # logic co thi thay doi khong co thi them vao du lieu day 
+    #     curriculum = self.get_object(pk)
+    #     serializer = CurriculumSerializer(curriculum, data=request.data, partial = True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     
 # thuc hien xoa di bảng con trong bang chinh can thiet

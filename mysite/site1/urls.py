@@ -7,5 +7,4 @@ urlpatterns = [
     path('curriculums_delete_child/<str:pk>', CurriculumDeleteChildView.as_view(), name='Curriculumm'),
     path('users/', UserCreateAPIView.as_view(), name='UserCreateAPIView'),
     path('users/<str:pk>', UserCreateAPIViewDetail.as_view(), name='UserCreateAPIViews'),
-
 ]
