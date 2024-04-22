@@ -7,11 +7,7 @@
         "document": "Deep Learning (học sâu) có thể được xem là một lĩnh vực con của Machine Learning (học máy) – ở đó các máy tính sẽ học và cải thiện chính nó thông qua các thuật toán. Deep Learning được xây dựng dựa trên các khái niệm phức tạp hơn rất nhiều, chủ yếu hoạt động với các mạng nơ-ron nhân tạo để bắt chước khả năng tư duy và suy nghĩ của bộ não con người.",
         "target": "Hiểu được deep learning",
         "description": "Deep Learning là máy học nâng cao của ml",
-        "subject_similar": [
-            {
-                "name": "Deep Learning"
-            }
-        ],
+        "subject_similar": 3,
         "time_update": "18/05/2056",
         "subject_pre": [
             {
@@ -91,11 +87,7 @@
         "document": "Một máy tính \"hoàn chỉnh\" bao gồm phần cứng, hệ điều hành (phần mềm chính) và thiết bị ngoại vi cần thiết và sử dụng cho hoạt động \"hoàn chỉnh\" có thể được gọi là hệ thống máy tính.",
         "target": "Hiểu về thành phần câu lệnh thao tác với máy tính",
         "description": "Mỗi loại máy tính có thể có hình dạng hoặc cấu trúc khác nhau. Một cách tổng quát, máy tính điện tử là một hệ xử lý thông tin tự động gồm 2 phần chính: phần cứng và phần mềm.",
-        "subject_similar": [
-            {
-                "name": "Hệ thốn máy tính"
-            }
-        ],
+        "subject_similar": 2,
         "time_update": "12/13/2026",
         "subject_pre": [
             {
@@ -140,7 +132,7 @@
         "document": "Kỹ năng lập trình là một nền tảng quan trọng cho việc xây dựng các ứng dụng và giải quyết các vấn đề phức tạp trong lĩnh vực công nghệ thông tin. Nó bao gồm một loạt các cách thức và phương pháp để thiết kế, xây dựng, và tối ưu hóa các chương trình và ứng dụng.",
         "target": "Học tập tốt, Lao động tốt",
         "description": "Giúp sinh viên hoàn thiện tiếp kĩ năng từ nhập môn lập trình",
-        "subject_similar": [],
+        "subject_similar": 4,
         "time_update": "12/03/2026",
         "subject_pre": [],
         "CLOs1": [],
@@ -251,7 +243,7 @@
         "document": "Machine learning (ML) hay máy học là một nhánh của trí tuệ nhân tạo (AI), nó là một lĩnh vực nghiên cứu cho phép máy tính có khả năng cải thiện chính bản thân chúng dựa trên dữ liệu mẫu (training data) hoặc dựa vào kinh nghiệm (những gì đã được học). Machine learning có thể tự dự đoán hoặc đưa ra quyết định mà không cần được lập trình cụ thể.",
         "target": "Hiểu được học máy , tinh chỉnh được thông số model",
         "description": "Thuộc về trí tuệ nhân tạo",
-        "subject_similar": [],
+        "subject_similar": 3,
         "time_update": "18/02/2025",
         "subject_pre": [
             {
@@ -340,7 +332,7 @@
         "document": "Mạng máy tính (computer network) là mạng viễn thông kỹ thuật số được sử dụng để kết nối các máy tính lại với nhau thông qua các thiết bị nối kết mạng và phương tiện truyền thông (giao thức mạng, môi trường truyền dẫn) theo một cấu trúc nào đó và các máy tính này trao đổi thông tin, dữ liệu qua lại với nhau.",
         "target": "Hiểu được thành phần mạng máy tính",
         "description": "Đây là mô tả mạng máy tính cơ sở",
-        "subject_similar": [],
+        "subject_similar": 3,
         "time_update": "15/03/2056",
         "subject_pre": [],
         "CLOs1": [],
@@ -359,7 +351,7 @@
         "document": "Lập trình là việc một người sử dụng các ngôn ngữ lập trình, các đoạn mã hay các tiện ích có sẵn để tạo ra một phần mềm máy tính, trò chơi, trang web, ứng dụng,... Điều này giúp người dùng đơn giản hóa việc thực hiện mệnh lệnh với laptop, hay dễ dàng tương tác với nhau thông qua các thiết bị điện tử. Và những người làm công việc lập trình thì được gọi chung là lập trình viên.",
         "target": "Môn nền tảng phát triển cho các em hiểu kĩ năng lập trình là gì",
         "description": "Lập trình basic for mảng kiểu dữ liệu và thuật toán đơn giản",
-        "subject_similar": [],
+        "subject_similar": 3,
         "time_update": "17/02/2022",
         "subject_pre": [],
         "CLOs1": [],
@@ -429,11 +421,7 @@
         "document": "Phát triển ứng dụng là quá trình tạo ra một chương trình máy tính hoặc một tập hợp các chương trình để thực hiện nhiều công việc khác nhau mà một doanh nghiệp yêu cầu. Từ tính toán chi phí hàng tháng đến lên lịch báo cáo bán hàng, các ứng dụng giúp doanh nghiệp tự động hóa các quy trình và tăng hiệu quả hoạt động.",
         "target": "Hiểu được cách xây dựng một ứng dụng có tư duy hệ thống để làm việc trong tương lai",
         "description": "Mô tả phát triển ứng dụng",
-        "subject_similar": [
-            {
-                "name": "Phát triển ứng dụng"
-            }
-        ],
+        "subject_similar": 4,
         "time_update": "12/05/2056",
         "subject_pre": [
             {
@@ -518,11 +506,7 @@
         "document": "Quá trình ngẫu nhiên là môn toán nâng cao",
         "target": "Quá trình ngẫu nhiên",
         "description": "Quá trình ngẫu nhiên",
-        "subject_similar": [
-            {
-                "name": "Quá trình ngẫu nhiên"
-            }
-        ],
+        "subject_similar": 3,
         "time_update": "12/05/2026",
         "subject_pre": [
             {
@@ -594,11 +578,7 @@
         "document": "Môn học này được thiết kế cho sinh viên năm 1-2 ở bậc đại học nhằm cung cấp cho sinh viên những hiểu biết cơ bản về lịch sử hình thành, quá trình phát triển và đặc điểm của tiếng Việt; giúp sinh viên củng cố và rèn luyện các kỹ năng sử dụng tiếng Việt",
         "target": "Hiểu được lập trình cơ bản",
         "description": "Nhập môn lập trình",
-        "subject_similar": [
-            {
-                "name": "Tiếng việt thực hành"
-            }
-        ],
+        "subject_similar": 4,
         "time_update": "13/05/2027",
         "subject_pre": [
             {
@@ -678,11 +658,7 @@
         "document": "Đại số tuyến tính là một nhánh của toán học liên quan đến các phương trình tuyến tính như: a 1 x 1 + ⋯ + a n x n = b , {\\displaystyle a_{1}x_{1}+\\cdots +a_{n}x_{n}=b,}",
         "target": "Toán cao học",
         "description": "Môn toán nâng cao",
-        "subject_similar": [
-            {
-                "name": "Đại số tuyến tính"
-            }
-        ],
+        "subject_similar": 3,
         "time_update": "17/06/2026",
         "subject_pre": [
             {

@@ -138,6 +138,7 @@ class ContentSerializer(serializers.ModelSerializer):
         
 class CourseSerializer(serializers.ModelSerializer):
     subject_pre = SubjectPreSerializer(many=True, required=False)
+    subject_similar = SubjectPreSerializer(many=True, required=False)
     CLOs1 = CLOs1Serializer(many=True, required=False)
     CLOs2 = CLOs2Serializer(many=True, required=False)
     CLOs3 = CLOs3Serializer(many=True, required=False)
@@ -163,6 +164,7 @@ class CourseSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Bỏ qua pop user ở đây vì đã handle ở PrimaryKeyRelatedField
         # if validated_data.get('user'):
+            subject_similar_data_list = validated_data.pop('subject_similar', [])
             subject_pre_data_list = validated_data.pop('subject_pre', [])
             CLOs1_data_list = validated_data.pop('CLOs1', [])
             CLOs2_data_list = validated_data.pop('CLOs2', [])
@@ -174,6 +176,10 @@ class CourseSerializer(serializers.ModelSerializer):
             
             curriculum = Course.objects.create(**validated_data)
             
+            for subject_similar_data in subject_similar_data_list:
+                subject_similar, created = SubjectPre.objects.get_or_create(**subject_similar_data)
+                curriculum.subject_similar.add(subject_similar)
+                
             # Xử lý cho các mối quan hệ ManyToMany...
             for subject_pre_data in subject_pre_data_list:
                 subject_pre, created = SubjectPre.objects.get_or_create(**subject_pre_data)
@@ -227,12 +233,27 @@ class CourseSerializer(serializers.ModelSerializer):
             instance.document = validated_data.get('document', instance.document)
             instance.target = validated_data.get('target', instance.target)
             instance.description = validated_data.get('description', instance.description)
-            instance.subject_similar = validated_data.get('subject_similar', instance.subject_similar)
+            # instance.subject_similar = validated_data.get('subject_similar', instance.subject_similar)
             instance.time_update = validated_data.get('time_update', instance.time_update)
             # instance.primary_teacher = validated_data.get('primary_teacher', instance.primary_teacher)
             # instance.head_department = validated_data.get('head_department', instance.head_department)
             instance.save()
             
+            if 'subject_similar' in validated_data:
+                new_items_data = validated_data.pop('subject_similar', [])
+                for item_data in new_items_data:
+                    item_id = item_data.get('id', None)
+                    if (item_id is not None) and SubjectPre.objects.filter(id=item_id).exists():
+                        item = SubjectPre.objects.filter(id=item_id).first()
+                        if item:
+                            for key, value in item_data.items():
+                                setattr(item, key, value)
+                            item.save()
+                    else:
+                        item_data.pop('id', None)
+                        new_item = SubjectPre.objects.create(**item_data)
+                        instance.subject_similar.add(new_item)
+                        
             if 'subject_pre' in validated_data:
                 new_items_data = validated_data.pop('subject_pre', [])
                 # new_ids = {item['id'] for item in new_items_data}  
@@ -444,6 +465,7 @@ class CurriculumCourseSerializer_DeleteChild(serializers.ModelSerializer):
         return super().update(instance, validated_data)
     
 class CourseSerializer_DeleteChild(serializers.ModelSerializer):
+    subject_similar_remove_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     subject_pre_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     CLOs1_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     CLOs2_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
@@ -459,10 +481,12 @@ class CourseSerializer_DeleteChild(serializers.ModelSerializer):
                 #   'document', 'target', 'description', 'subject_similar', 
                 #   'time_update',
                 #   'primary_teacher', 'head_department', 'teacher'
+                'subject_similar_remove_request',
                 'subject_pre_removal_request','CLOs1_removal_request','CLOs2_removal_request', 'CLOs3_removal_request','content_removal_request', 
                 'primary_teacher_removal_request', 'head_department_removal_request', 'teacher_removal_request'
                 ]
     def update(self, instance, validated_data):
+        subject_similar_names_to_remove = validated_data.pop('subject_similar_remove_request', [])
         subject_pre_names_to_remove = validated_data.pop('subject_pre_removal_request', [])
         CLOs1_orders_to_remove = validated_data.pop('CLOs1_removal_request', [])
         CLOs2_orders_to_remove = validated_data.pop('CLOs2_removal_request', [])
@@ -474,6 +498,12 @@ class CourseSerializer_DeleteChild(serializers.ModelSerializer):
         head_list_to_remove = validated_data.pop('head_department_removal_request', [])
         teacher_list_to_remove = validated_data.pop('teacher_removal_request', [])
 
+        for id in subject_similar_names_to_remove:
+            try:
+                instance.subject_similar.filter(id=id).delete()
+            except SubjectPre.DoesNotExist:
+                pass
+            
         for id in subject_pre_names_to_remove:
             try:
                 instance.subject_pre.filter(id=id).delete()

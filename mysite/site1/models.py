@@ -154,9 +154,11 @@ class Course(models.Model):
     document = models.TextField(blank=True)  
     target = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    subject_similar = models.IntegerField(blank=True)
+    # subject_similar = models.IntegerField(blank=True)
     
-    subject_pre = models.ManyToManyField(SubjectPre, blank=True)
+    subject_similar = models.ManyToManyField(SubjectPre,related_name='subject_simiar_course', blank=True)
+    
+    subject_pre = models.ManyToManyField(SubjectPre,related_name='subject_pre_course', blank=True)
     CLOs1 = models.ManyToManyField(CLOs1, blank=True)
     CLOs2 = models.ManyToManyField(CLOs2, blank=True)
     CLOs3 = models.ManyToManyField(CLOs3, blank=True)
@@ -183,7 +185,9 @@ class Course(models.Model):
             "document": self.document,
             "target": self.target,
             "description": self.description,
-            "subject_similar": self.subject_similar,
+            
+            # "subject_similar": self.subject_similar,
+            
             "time_update": self.time_update
         }
 
@@ -196,6 +200,7 @@ class Course(models.Model):
         course_dict['primary_teacher'] = [teacher.to_dict() for teacher in self.primary_teacher.all()]
         course_dict['head_department'] = [head.to_dict() for head in self.head_department.all()]
         course_dict['teacher'] = [teacher.to_dict() for teacher in self.teacher.all()]
+        course_dict['subject_similar'] = [subject.to_dict() for subject in self.subject_similar.all()]
 
         return course_dict
 # update db 14/04/2024

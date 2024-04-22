@@ -1,0 +1,88 @@
+[
+    {
+        "id_user": "id_gv_binh",
+        "role": 3,
+        "first_name": "Binh",
+        "last_name": "Le",
+        "gmail": "binhle@gmail.com",
+        "courses": [
+            "id_course_htmt",
+            "id_course_ktlt",
+            "id_course_tvth"
+        ],
+        "Curriculum": []
+    },
+    {
+        "id_user": "id_gv_hung",
+        "role": 1,
+        "first_name": "Hung",
+        "last_name": "Hoang",
+        "gmail": "hoanghung@gmail.com",
+        "courses": [
+            "id_course_dl",
+            "id_course_ml"
+        ],
+        "Curriculum": [
+            "id_curriculums_nm"
+        ]
+    },
+    {
+        "id_user": "id_gv_kien",
+        "role": 3,
+        "first_name": "Kien",
+        "last_name": "Nguyen",
+        "gmail": "thaykien@gmail.com",
+        "courses": [
+            "id_course_dl",
+            "id_course_ml",
+            "id_course_qtnn"
+        ],
+        "Curriculum": [
+            "id_curriculums_kt",
+            "id_curriculums_nm",
+            "id_curriculums_nc"
+        ]
+    },
+    {
+        "id_user": "id_gv_linh",
+        "role": 2,
+        "first_name": "Linh",
+        "last_name": "Nguyễn",
+        "gmail": "nguyenvanlinh@gmail.com",
+        "courses": [
+            "id_course_mmt",
+            "id_course_ptud"
+        ],
+        "Curriculum": [
+            "id_curriculums_kt",
+            "id_curriculums_nm"
+        ]
+    },
+    {
+        "id_user": "id_gv_Nam",
+        "role": 1,
+        "first_name": "Nam",
+        "last_name": "Nguyen",
+        "gmail": "nguyenvannam@gmail.com",
+        "courses": [
+            "id_course_ml",
+            "id_course_dstt"
+        ],
+        "Curriculum": []
+    },
+    {
+        "id_user": "id_gv_tinh",
+        "role": 3,
+        "first_name": "Tinh",
+        "last_name": "Huu",
+        "gmail": "huutinh@gmail.com",
+        "courses": [
+            "id_course_htmt",
+            "id_course_ktlt",
+            "id_course_nmlt"
+        ],
+        "Curriculum": [
+            "id_curriculums_kt"
+        ]
+    }
+]
