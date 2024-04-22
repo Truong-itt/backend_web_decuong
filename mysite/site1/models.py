@@ -14,6 +14,17 @@ class User(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def to_dict(self):
+        return {
+            "id_user": self.id_user,
+            "role": self.role,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "gmail": self.gmail,
+            "courses": [course.id_course_main for course in self.courses.all()],
+            "Curriculum": [curriculum.id_curriculum for curriculum in self.Curriculum.all()]
+        }
 
 class SubjectPre(models.Model):
     # id_subject = models.CharField(max_length=255, primary_key=True)
@@ -25,6 +36,11 @@ class SubjectPre(models.Model):
     def __str__(self):
         return self.name
 
+    def to_dict(self):
+        return {
+            # "id": self.id,
+            "name": self.name
+        }
 class CLOs1(models.Model):
     # id_clos1 = models.CharField(max_length=255, primary_key=True)
     id = models.AutoField(primary_key=True)
@@ -37,6 +53,13 @@ class CLOs1(models.Model):
 
     def __str__(self):
         return f"CLOs1 Order {self.order}: {self.content}"
+    
+    def to_dict(self):
+        return {
+            "order": self.order,
+            "content": self.content,
+            "PLO": self.PLO
+        }
 
 class CLOs2(models.Model):
     # id_clos2 = models.CharField(max_length=255, primary_key=True)
@@ -57,6 +80,18 @@ class CLOs2(models.Model):
     def __str__(self):
         return f"CLOs2 Order {self.order}"
 
+    def to_dict(self):
+        return {
+            "order": self.order,
+            "a": self.a,
+            "b": self.b,
+            "c": self.c,
+            "d": self.d,
+            "e": self.e,
+            "f": self.f,
+            "g": self.g,
+            "h": self.h
+        }
 class CLOs3(models.Model):
     # id_clos3 = models.CharField(max_length=255, primary_key=True)
     id = models.AutoField(primary_key=True)
@@ -71,6 +106,15 @@ class CLOs3(models.Model):
     
     def __str__(self):
         return f"CLOs3 Order {self.order}: {self.exam}"
+    
+    def to_dict(self):
+        return {
+            "order": self.order,
+            "exam": self.exam,
+            "method": self.method,
+            "point": self.point,
+            "criteria": self.criteria
+        }
 
 class Content(models.Model):
     # id_content = models.CharField(max_length=255, primary_key=True)
@@ -87,6 +131,16 @@ class Content(models.Model):
 
     def __str__(self):
         return f"Content Order {self.order}: {self.content}"
+    
+    def to_dict(self):
+        return {
+            "order": self.order,
+            "content": self.content,
+            "number_session": self.number_session,
+            "CLOs": self.CLOs,
+            "method": self.method,
+            "self_study": self.self_study
+        }
 
 
 class Course(models.Model):
@@ -119,6 +173,31 @@ class Course(models.Model):
     def __str__(self):
         return self.title
     
+    def to_dict(self):
+        # Tạo dictionary cho các trường cơ bản
+        course_dict = {
+            "id_course_main": self.id_course_main,
+            "name": self.name,
+            "title": self.title,
+            "number_credit": self.number_credit,
+            "document": self.document,
+            "target": self.target,
+            "description": self.description,
+            "subject_similar": self.subject_similar,
+            "time_update": self.time_update
+        }
+
+        # Thêm các trường ManyToMany bằng cách sử dụng list comprehension
+        course_dict['subject_pre'] = [subject_pre.to_dict() for subject_pre in self.subject_pre.all()]
+        course_dict['CLOs1'] = [clos1.to_dict() for clos1 in self.CLOs1.all()]
+        course_dict['CLOs2'] = [clos2.to_dict() for clos2 in self.CLOs2.all()]
+        course_dict['CLOs3'] = [clos3.to_dict() for clos3 in self.CLOs3.all()]
+        course_dict['content'] = [content.to_dict() for content in self.content.all()]
+        course_dict['primary_teacher'] = [teacher.to_dict() for teacher in self.primary_teacher.all()]
+        course_dict['head_department'] = [head.to_dict() for head in self.head_department.all()]
+        course_dict['teacher'] = [teacher.to_dict() for teacher in self.teacher.all()]
+
+        return course_dict
 # update db 14/04/2024
     
 class CurriculumCourse(models.Model):
@@ -135,6 +214,15 @@ class CurriculumCourse(models.Model):
     def __str__(self):
         return self.id_curriculumCourse
     
+    def to_dict(self):
+        return {
+            "id_curriculumCourse": self.id_curriculumCourse,
+            "mandatory": self.mandatory,
+            "is_confirm": self.is_confirm,
+            "semester": self.semester,
+            "teacher": [teacher.to_dict() for teacher in self.teacher.all()],
+            "id_course": [course.id_course_main for course in self.id_course.all()]
+        }
 class Curriculum(models.Model):
     id_curriculum = models.CharField(max_length=255, primary_key=True)
     name = models.CharField(max_length=255)
@@ -147,3 +235,11 @@ class Curriculum(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def to_dict(self):
+        return {
+            "id_curriculum": self.id_curriculum,
+            "name": self.name,
+            "year": self.year,
+            "curriculum_course": [curriculum_course.to_dict() for curriculum_course in self.curriculum_course.all()]
+        }
