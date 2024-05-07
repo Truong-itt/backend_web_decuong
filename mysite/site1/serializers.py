@@ -5,7 +5,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.contrib.auth import get_user_model
+User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     curriculums_ids = serializers.ListField(
         child=serializers.CharField(),
@@ -22,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id_user', 'role', 'first_name', 'last_name', 'gmail', 'courses', 'Curriculum', 'curriculums_ids', 'courses_ids']
+        fields = ['id_user', 'role', 'first_name', 'last_name', 'email', 'courses', 'Curriculum', 'curriculums_ids', 'courses_ids']
 
     def create(self, validated_data):
         curriculums_data_list = validated_data.pop('curriculums_ids', [])
@@ -36,8 +39,9 @@ class UserSerializer(serializers.ModelSerializer):
         courses_data_list = validated_data.pop('courses_ids', [])
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.gmail = validated_data.get('gmail', instance.gmail)
+        instance.email = validated_data.get('email', instance.email)
         instance.role = validated_data.get('role', instance.role)
+        #  khong thuc hiẹn update password
         instance.save()
         self._handle_associations(instance, curriculums_data_list, courses_data_list)
         return instance
@@ -65,7 +69,31 @@ class UserSerializer(serializers.ModelSerializer):
                         pass
                         # raise serializers.ValidationError({"courses_ids": f"Course with ID {course_id} not found"})
 
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
 
+    class Meta:
+        model = User
+        fields = ('id_user', 'role', 'first_name', 'last_name', 'email', 'password')
+        extra_kwargs = {'email': {'required': True}}  # Đảm bảo email là bắt buộc
+
+    def validate_email(self, value):
+        try:
+            validate_email(value)
+        except ValidationError as e:
+            raise serializers.ValidationError("Invalid email address")
+        return value  # Trả về giá trị email hợp lệ
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            id_user=validated_data['id_user'],
+            role=validated_data['role'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
 
 class UserRemoveAssociationsSerializer(serializers.ModelSerializer):
     curriculums_ids_remove = serializers.ListField(
@@ -105,9 +133,10 @@ class UserRemoveAssociationsSerializer(serializers.ModelSerializer):
     
 class SubjectPreSerializer(serializers.ModelSerializer):
     id_subjectpre = serializers.IntegerField(required=False)
+    id_subjectsimilar = serializers.IntegerField(required=False)
     class Meta:
         model = SubjectPre
-        fields = ['id', 'name', 'id_subjectpre']
+        fields = ['id', 'name', 'id_subjectpre', 'id_subjectsimilar']
         
 class CLOs1Serializer(serializers.ModelSerializer):
     id_clos1 = serializers.IntegerField(required=False)
@@ -127,6 +156,14 @@ class CLOs3Serializer(serializers.ModelSerializer):
         model = CLOs3
         fields = ['id', 'order','id_clos3', 'exam', 'method', 'point','criteria']
         
+class CLOs4Serializer(serializers.ModelSerializer):
+    id_clos4 = serializers.IntegerField(required=False)
+    
+    class Meta:
+        model = CLOs4
+        fields = ['id', 'order', 'method', 'exam', 'criteria', 'id_clos4']
+
+    
 class ContentSerializer(serializers.ModelSerializer):
     id_content = serializers.IntegerField(required=False)
     class Meta:
@@ -142,6 +179,7 @@ class CourseSerializer(serializers.ModelSerializer):
     CLOs1 = CLOs1Serializer(many=True, required=False)
     CLOs2 = CLOs2Serializer(many=True, required=False)
     CLOs3 = CLOs3Serializer(many=True, required=False)
+    CLOs4 = CLOs4Serializer(many=True, required=False)
     content = ContentSerializer(many=True, required=False)
     primary_teacher_ids = serializers.ListField(child=serializers.CharField(), write_only=True, required=False)
     head_department_ids = serializers.ListField(child=serializers.CharField(), write_only=True, required=False)
@@ -157,7 +195,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ['id_course_main', 'name',
                   'title', 'number_credit', 'document', 'target', 'description',
-                  'subject_similar', 'subject_pre', 'CLOs1', 'CLOs2',
+                  'subject_similar', 'subject_pre', 'CLOs1', 'CLOs2','CLOs4',
                   'CLOs3', 'content', 'time_update', 'primary_teacher', 'head_department',
                   'primary_teacher_ids', 'head_department_ids', 'teachers_ids','teacher']
     
@@ -169,6 +207,7 @@ class CourseSerializer(serializers.ModelSerializer):
             CLOs1_data_list = validated_data.pop('CLOs1', [])
             CLOs2_data_list = validated_data.pop('CLOs2', [])
             CLOs3_data_list = validated_data.pop('CLOs3', [])
+            CLOs4_data_list = validated_data.pop('CLOs4', [])
             content_data_list = validated_data.pop('content', [])
             primary_teacher_data_list = validated_data.pop('primary_teacher_ids', [])
             head_department_data_list = validated_data.pop('head_department_ids', [])
@@ -200,6 +239,11 @@ class CourseSerializer(serializers.ModelSerializer):
             for CLOs3_data in CLOs3_data_list:
                 clos3_obj, created = CLOs3.objects.get_or_create(**CLOs3_data)
                 curriculum.CLOs3.add(clos3_obj)
+                
+            for CLOs4_data in CLOs4_data_list:
+                clos4_obj, created = CLOs4.objects.get_or_create(**CLOs4_data)
+                curriculum.CLOs4.add(clos4_obj)
+            
             
             for content_data in content_data_list:
                 content_obj, created = Content.objects.get_or_create(**content_data)
@@ -242,7 +286,8 @@ class CourseSerializer(serializers.ModelSerializer):
             if 'subject_similar' in validated_data:
                 new_items_data = validated_data.pop('subject_similar', [])
                 for item_data in new_items_data:
-                    item_id = item_data.get('id', None)
+                    item_id = item_data.get('id_subjectsimilar', None)
+                    print("xin chao ",item_id)
                     if (item_id is not None) and SubjectPre.objects.filter(id=item_id).exists():
                         item = SubjectPre.objects.filter(id=item_id).first()
                         if item:
@@ -250,21 +295,15 @@ class CourseSerializer(serializers.ModelSerializer):
                                 setattr(item, key, value)
                             item.save()
                     else:
-                        item_data.pop('id', None)
+                        item_data.pop('id_subjectsimilar', None)
                         new_item = SubjectPre.objects.create(**item_data)
                         instance.subject_similar.add(new_item)
                         
             if 'subject_pre' in validated_data:
-                new_items_data = validated_data.pop('subject_pre', [])
-                # new_ids = {item['id'] for item in new_items_data}  
-                print(new_items_data)
-                # cap nhat va tao moi 
+                new_items_data = validated_data.pop('subject_pre', []) 
                 for item_data in new_items_data:
                     item_id = item_data.get('id_subjectpre', None)
-                    # giai quyet  co và co trong he thong  
-                    #  co va chua co trong he  thong
-                    
-                    # neu item_id ton tai va co trong db thi cap nhat
+                    print("xin chao ",item_id)
                     if (item_id is not None) and SubjectPre.objects.filter(id=item_id).exists() :
                         item = SubjectPre.objects.filter(id=item_id).first()  #tim kiem co hay khong
                         if item:
@@ -272,6 +311,7 @@ class CourseSerializer(serializers.ModelSerializer):
                                 setattr(item, key, value)
                             item.save()
                     else:
+                        print("xin chao moi nguoi")
                         item_data.pop('id_subjectpre', None)   # dam bao cho id la None de cap nhat khong bi sai logic 
                         new_item = SubjectPre.objects.create(**item_data)
                         instance.subject_pre.add(new_item)
@@ -322,6 +362,22 @@ class CourseSerializer(serializers.ModelSerializer):
                         item_data.pop('id_clos3', None)
                         new_item = CLOs3.objects.create(**item_data)
                         instance.CLOs3.add(new_item)
+                    
+            if 'CLOs4' in validated_data:
+                new_items_data = validated_data.pop('CLOs4', [])
+                
+                for item_data in new_items_data:
+                    item_id = item_data.get('id_clos4', None)
+                    if item_data and CLOs4.objects.filter(id=item_id).exists():
+                        item = CLOs4.objects.filter(id=item_id).first()
+                        if item:
+                            for key, value in item_data.items():
+                                setattr(item, key, value)
+                            item.save()
+                    else:
+                        item_data.pop('id_clos4', None)
+                        new_item = CLOs4.objects.create(**item_data)
+                        instance.CLOs4.add(new_item)
                 
             if 'content' in validated_data:
                 new_items_data = validated_data.pop('content', [])
@@ -465,6 +521,7 @@ class CurriculumCourseSerializer_DeleteChild(serializers.ModelSerializer):
         return super().update(instance, validated_data)
     
 class CourseSerializer_DeleteChild(serializers.ModelSerializer):
+    CLOs4_remove_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     subject_similar_remove_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     subject_pre_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     CLOs1_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
@@ -481,7 +538,7 @@ class CourseSerializer_DeleteChild(serializers.ModelSerializer):
                 #   'document', 'target', 'description', 'subject_similar', 
                 #   'time_update',
                 #   'primary_teacher', 'head_department', 'teacher'
-                'subject_similar_remove_request',
+                'subject_similar_remove_request','CLos4_remove_request'
                 'subject_pre_removal_request','CLOs1_removal_request','CLOs2_removal_request', 'CLOs3_removal_request','content_removal_request', 
                 'primary_teacher_removal_request', 'head_department_removal_request', 'teacher_removal_request'
                 ]
@@ -491,6 +548,7 @@ class CourseSerializer_DeleteChild(serializers.ModelSerializer):
         CLOs1_orders_to_remove = validated_data.pop('CLOs1_removal_request', [])
         CLOs2_orders_to_remove = validated_data.pop('CLOs2_removal_request', [])
         CLOs3_orders_to_remove = validated_data.pop('CLOs3_removal_request', [])
+        CLOs4_orders_to_remove = validated_data.pop('CLOs4_remove_request', [])
         content_orders_to_remove = validated_data.pop('content_removal_request', [])
         
         # user gerneral
@@ -527,6 +585,13 @@ class CourseSerializer_DeleteChild(serializers.ModelSerializer):
                 instance.CLOs3.filter(id=id).delete()
             except CLOs3.DoesNotExist:
                 pass
+            
+        #  Removing CLOs4 by order
+        for id in CLOs4_orders_to_remove:
+            try:
+                instance.CLOs4.filter(id=id).delete()
+            except CLOs4.DoesNotExist:
+                pass
         # Removing Content by order
         for id in content_orders_to_remove:
             try:
@@ -556,98 +621,6 @@ class CourseSerializer_DeleteChild(serializers.ModelSerializer):
                 pass
         return super().update(instance, validated_data)
         
-# class CourseSerializer_DeleteChild(serializers.ModelSerializer):
-#     subject_pre = SubjectPreSerializer(many=True, required=False)
-#     CLOs1 = CLOs1Serializer(many=True, required=False)
-#     CLOs2 = CLOs2Serializer(many=True, required=False)
-#     CLOs3 = CLOs3Serializer(many=True, required=False)
-#     content = ContentSerializer(many=True, required=False)
-
-    
-#     subject_pre_removal_request = serializers.ListField(child=serializers.CharField(), required=False, write_only=True)
-#     CLOs1_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
-#     CLOs2_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
-#     CLOs3_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
-#     content_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)  
-#     primary_teacher_removal_request = serializers.ListField(child=serializers.CharField(), required=False, write_only=True)
-#     head_department_removal_request = serializers.ListField(child=serializers.CharField(), required=False, write_only=True)
-#     teacher_removal_request = serializers.ListField(child=serializers.CharField(), required=False, write_only=True)
-#     class Meta:
-#         model = Course
-#         fields = [
-#                   'id_course_main', 'name', 
-#                   'title', 'number_credit', 'document', 'target', 'description',
-#                   'subject_similar', 'subject_pre', 'CLOs1', 'CLOs2','teacher'
-#                   'CLOs3', 'content', 'time_update', 'primary_teacher', 'head_department',
-#                   'subject_pre_removal_request', 'CLOs1_removal_request', 'CLOs2_removal_request',
-#                   'CLOs3_removal_request', 'content_removal_request'
-#                   'primary_teacher_removal_request', 'head_department_removal_request', 'teacher_removal_request'
-#                   ]
-    
-#     def update(self, instance, validated_data):
-#         subject_pre_names_to_remove = validated_data.pop('subject_pre_removal_request', [])
-#         CLOs1_orders_to_remove = validated_data.pop('CLOs1_removal_request', [])
-#         CLOs2_orders_to_remove = validated_data.pop('CLOs2_removal_request', [])
-#         CLOs3_orders_to_remove = validated_data.pop('CLOs3_removal_request', [])
-#         content_orders_to_remove = validated_data.pop('content_removal_request', [])
-        
-#         # user gerneral
-#         primary_teacher_list_to_remove = validated_data.pop('primary_teacher_removal_request', [])
-#         head_list_to_remove = validated_data.pop('head_department_removal_request', [])
-#         teacher_list_to_remove = validated_data.pop('teacher_removal_request', [])
-
-#         for id in subject_pre_names_to_remove:
-#             try:
-#                 instance.subject_pre.filter(id=id).delete()
-#             except SubjectPre.DoesNotExist:
-#                 pass
-#         # Removing CLOs1 by order
-#         for id in CLOs1_orders_to_remove:
-#             try:
-#                 instance.CLOs1.filter(id=id).delete()
-#             except CLOs1.DoesNotExist:
-#                 pass
-#         # Removing CLOs2 by order
-#         for id in CLOs2_orders_to_remove:
-#             try:
-#                 instance.CLOs2.filter(id=id).delete()
-#             except CLOs2.DoesNotExist:
-#                 pass
-#         # Removing CLOs3 by order
-#         for id in CLOs3_orders_to_remove:
-#             try:
-#                 instance.CLOs3.filter(id=id).delete()
-#             except CLOs3.DoesNotExist:
-#                 pass
-#         # Removing Content by order
-#         for id in content_orders_to_remove:
-#             try:
-#                 instance.content.filter(id=id).delete()
-#             except Content.DoesNotExist:
-#                 pass
-            
-#         for item in primary_teacher_list_to_remove:
-#             try:
-#                 teacher = User.objects.get(id_user=item)
-#                 instance.primary_teacher.remove(teacher)
-#             except User.DoesNotExist:
-#                 pass
-        
-#         for item in head_list_to_remove:
-#             try:
-#                 head = User.objects.get(id_user=item)
-#                 instance.head_department.remove(head)
-#             except User.DoesNotExist:
-#                 pass
-            
-#         for item in teacher_list_to_remove:
-#             try:
-#                 teacher = User.objects.get(id_user=item)
-#                 instance.teacher.remove(teacher)
-#             except User.DoesNotExist:
-#                 pass
-#         return super().update(instance, validated_data)
-        
 class CurriculumSerializer(serializers.ModelSerializer):
     curriculum_course_data = serializers.ListField(
         child=serializers.DictField(),
@@ -657,8 +630,10 @@ class CurriculumSerializer(serializers.ModelSerializer):
     curriculum_course = CurriculumCourseSerializer(many=True, required=False)
     curriculum_course_ids = serializers.ListField(child=serializers.CharField(), write_only=True, required=False)
     class Meta:
-        model = Curriculum
-        fields = ['id_curriculum', 'name', 'year','curriculum_course','curriculum_course_ids','curriculum_course_data']
+        model = Curriculum  
+        fields = ['id_curriculum', 'name', 'year','curriculum_course',
+                  'department','note',  
+                  'curriculum_course_ids','curriculum_course_data']
         
     #  them dua tren id_course muon co thi thuc thi ham ben kia truoc
     # def create(self, validated_data):
@@ -741,6 +716,8 @@ class CurriculumSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.year = validated_data.get('year', instance.year)
+        instance.department = validated_data.get('department', instance.department)
+        instance.note = validated_data.get('note', instance.note)
         instance.save()
 
         curriculum_courses_data = validated_data.pop('curriculum_course_data', [])

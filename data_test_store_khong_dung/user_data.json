@@ -10,7 +10,8 @@
             "id_course_ktlt",
             "id_course_tvth"
         ],
-        "Curriculum": []
+        "Curriculum": [],
+        "password": "id_gv_binh"
     },
     {
         "id_user": "id_gv_hung",
@@ -24,7 +25,8 @@
         ],
         "Curriculum": [
             "id_curriculums_nm"
-        ]
+        ],
+        "password": "id_gv_hung"
     },
     {
         "id_user": "id_gv_kien",
@@ -41,7 +43,8 @@
             "id_curriculums_kt",
             "id_curriculums_nm",
             "id_curriculums_nc"
-        ]
+        ],
+        "password": "id_gv_kien"
     },
     {
         "id_user": "id_gv_linh",
@@ -56,7 +59,8 @@
         "Curriculum": [
             "id_curriculums_kt",
             "id_curriculums_nm"
-        ]
+        ],
+        "password": "id_gv_linh"
     },
     {
         "id_user": "id_gv_Nam",
@@ -68,7 +72,8 @@
             "id_course_ml",
             "id_course_dstt"
         ],
-        "Curriculum": []
+        "Curriculum": [],
+        "password": "id_gv_Nam"
     },
     {
         "id_user": "id_gv_tinh",
@@ -83,6 +88,7 @@
         ],
         "Curriculum": [
             "id_curriculums_kt"
-        ]
+        ],
+        "password": "id_gv_tinh"
     }
 ]

@@ -1,4 +1,3 @@
-
 import os
 import django
 import json
@@ -6,17 +5,33 @@ import json
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 django.setup()
 
-from django.contrib.auth.models import User as AuthUser
+# from django.contrib.auth.models import User 
+# as AuthUser
 
         
-from site1.models import Course, SubjectPre, CLOs1, CLOs2, CLOs3, Content, User, CurriculumCourse, Curriculum
+from site1.models import Course, SubjectPre, CLOs1, CLOs2, CLOs3, CLOs4, Content, User, CurriculumCourse, Curriculum
 
     
 print(os.environ.get("DJANGO_SETTINGS_MODULE"))
 
+# def create_superuser():
+#     if not AuthUser.objects.filter(username='admin').exists():
+#         AuthUser.objects.create_superuser('admin', 'admin@example.com', 'admin')
+#         print('Superuser created successfully.')
+#     else:
+#         print('Superuser already exists.')
+
 def create_superuser():
-    if not AuthUser.objects.filter(username='admin').exists():
-        AuthUser.objects.create_superuser('admin', 'admin@example.com', 'admin')
+    id_user = 'admin_id'
+    email = 'admin@gmail.com'
+    first_name = 'Admin'
+    last_name = 'User'
+    role = 99  # Ví dụ cho role của superuser
+    password = '123456'
+
+    # Kiểm tra xem superuser đã tồn tại chưa
+    if not User.objects.filter(email=email).exists():
+        User.objects.create_superuser(id_user=id_user, email=email, first_name=first_name, last_name=last_name, role=role, password=password)
         print('Superuser created successfully.')
     else:
         print('Superuser already exists.')
@@ -50,20 +65,19 @@ def load_data():
                         'role': teacher_data['role'],
                         'first_name': teacher_data['first_name'],
                         'last_name': teacher_data['last_name'],
-                        'gmail': teacher_data['gmail'],
+                        'email': teacher_data['email'],
+                        'password': teacher_data['password']
                     }
                 )
+                if created:
+                    user.set_password(teacher_data['password'])
+                    user.save()
                 primary_teachers.append(user)
             except Exception as e:
                 print(e)
+        
+      
                 
-        # print("=====================================")
-            # primary_teachers.append(user)
-    # print(primary_teachers)
-        # print(primary_teachers)
-
-        
-        
         head_departments = []
         for teacher_data in course_data['head_department']:
             user, created = User.objects.get_or_create(
@@ -72,9 +86,13 @@ def load_data():
                     'role': teacher_data['role'],
                     'first_name': teacher_data['first_name'],
                     'last_name': teacher_data['last_name'],
-                    'gmail': teacher_data['gmail'],
+                    'email': teacher_data['email'],
+                    # 'password': teacher_data['password']
                 }
             )
+            if created:
+                user.set_password(teacher_data['password'])
+                user.save()
             head_departments.append(user)
         
         teachers = []
@@ -85,9 +103,13 @@ def load_data():
                     'role': teacher_data['role'],
                     'first_name': teacher_data['first_name'],
                     'last_name': teacher_data['last_name'],
-                    'gmail': teacher_data['gmail'],
+                    'email': teacher_data['email'],
+                    # 'password': teacher_data['password']
                 }
             )
+            if created:
+                user.set_password(teacher_data['password'])
+                user.save()
             teachers.append(user)
             
         subject_pres = []
@@ -132,7 +154,15 @@ def load_data():
             )
             CLOs3s.append(CLOs3_data)
             
-  
+        CLOs4s = []
+        for CLos4_item in course_data.get('CLOs4', []):
+            CLOs4_data, created = CLOs4.objects.get_or_create(
+                order = CLos4_item['order'],
+                exam = CLos4_item['exam'],
+                method = CLos4_item['method'],
+                criteria = CLos4_item['criteria'],
+            )
+            
         contents = []
         for content_item in course_data.get('content', []):
             content, created = Content.objects.get_or_create(
@@ -172,61 +202,11 @@ def load_data():
         course.CLOs1.set(CLOs1s)
         course.CLOs2.set(CLOs2s)
         course.CLOs3.set(CLOs3s)
+        course.CLOs4.set(CLOs4s)
         course.content.set(contents)        
         course.save()
 
-    #  cu li cho currcourse 
-    # [
-    #     {
-    #         "id_curriculumCourse": "id_currcourse_kt",
-    #         "mandatory": true,
-    #         "is_confirm": true,
-    #         "semester": 3,
-    #         "teacher": [
-    #             {
-    #                 "id_user": "id_gv_hung",
-    #                 "role": 1,
-    #                 "first_name": "Hung",
-    #                 "last_name": "Hoang",
-    #                 "gmail": "hoanghung@gmail.com",
-    #                 "courses": [
-    #                     "id_course_dl",
-    #                     "id_course_ml"
-    #                 ],
-    #                 "Curriculum": []
-    #             },
-    #             {
-    #                 "id_user": "id_gv_linh",
-    #                 "role": 2,
-    #                 "first_name": "Linh",
-    #                 "last_name": "Nguyễn",
-    #                 "gmail": "nguyenvanlinh@gmail.com",
-    #                 "courses": [
-    #                     "id_course_mmt",
-    #                     "id_course_ptud"
-    #                 ],
-    #                 "Curriculum": []
-    #             },
-    #             {
-    #                 "id_user": "id_gv_Nam",
-    #                 "role": 1,
-    #                 "first_name": "Nam",
-    #                 "last_name": "Nguyen",
-    #                 "gmail": "nguyenvannam@gmail.com",
-    #                 "courses": [
-    #                     "id_course_ml",
-    #                     "id_course_dstt"
-    #                 ],
-    #                 "Curriculum": []
-    #             }
-    #         ],
-    #         "id_course": [
-    #             "id_course_dl",
-    #             "id_course_ml",
-    #             "id_course_ptud"
-    #         ]
-    #     }
-    # ]
+
         
     with open('data_example/currcourse_data.json', 'r', encoding='utf-8') as file:
         currcourse_data = json.load(file)
@@ -241,9 +221,13 @@ def load_data():
                     'role': teacher_data['role'],
                     'first_name': teacher_data['first_name'],
                     'last_name': teacher_data['last_name'],
-                    'gmail': teacher_data['gmail'],
+                    'email': teacher_data['email'],
+                    # 'password': teacher_data['password']
                 }
             )
+            if created:
+                user.set_password(teacher_data['password'])
+                user.save()
             teachers.append(user)
             
         courses = []
@@ -265,66 +249,7 @@ def load_data():
         currcourse.id_course.set(courses)
         currcourse.save()
         
-    #  xu li cho bang curriculum dam bao moi quan he nhieu nhieu giua currcourse va curriculum va cac truong thong thuong
-    #  example data currculum
-    # [
-    # {
-    #     "id_curriculum": "id_curriculums_kt",
-    #     "name": "Kĩ thuật",
-    #     "year": "2023",
-    #     "curriculum_course": [
-    #         {
-    #             "id_curriculumCourse": "id_currcourse_kt",
-    #             "mandatory": true,
-    #             "is_confirm": true,
-    #             "semester": 3,
-    #             "teacher": [
-    #                 {
-    #                     "id_user": "id_gv_hung",
-    #                     "role": 1,
-    #                     "first_name": "Hung",
-    #                     "last_name": "Hoang",
-    #                     "gmail": "hoanghung@gmail.com",
-    #                     "courses": [
-    #                         "id_course_dl",
-    #                         "id_course_ml"
-    #                     ],
-    #                     "Curriculum": []
-    #                 },
-    #                 {
-    #                     "id_user": "id_gv_linh",
-    #                     "role": 2,
-    #                     "first_name": "Linh",
-    #                     "last_name": "Nguyễn",
-    #                     "gmail": "nguyenvanlinh@gmail.com",
-    #                     "courses": [
-    #                         "id_course_mmt",
-    #                         "id_course_ptud"
-    #                     ],
-    #                     "Curriculum": []
-    #                 },
-    #                 {
-    #                     "id_user": "id_gv_Nam",
-    #                     "role": 1,
-    #                     "first_name": "Nam",
-    #                     "last_name": "Nguyen",
-    #                     "gmail": "nguyenvannam@gmail.com",
-    #                     "courses": [
-    #                         "id_course_ml",
-    #                         "id_course_dstt"
-    #                     ],
-    #                     "Curriculum": []
-    #                 }
-    #             ],
-    #             "id_course": [
-    #                 "id_course_dl",
-    #                 "id_course_ml",
-    #                 "id_course_ptud"
-    #             ]
-    #         }
-    #     ]
-    # }
-    # ]
+    #  xu li cho curriculum
     
     with open('data_example/curr_data.json', 'r', encoding='utf-8') as file:
         curr_data = json.load(file)
@@ -340,6 +265,8 @@ def load_data():
             defaults={
                 'name': curr_item['name'],
                 'year': curr_item['year'],
+                'department': curr_item.get('department', ''),
+                'note': curr_item.get('note', '')                
             }
         )
         curriculum.curriculum_course.set(currcourses)
@@ -364,24 +291,62 @@ def load_data():
     # }
     # ]
     
+    # with open('data_example/user_data.json', 'r', encoding='utf-8') as file:
+    #     user_data = json.load(file)
+    
+    # for user_item in user_data:
+    #     user = User.objects.get(id_user=user_item['id_user'])
+    #     courses_to_add = []
+    #     for course_id in user_item.get('courses', []):
+    #         course = Course.objects.get(id_course_main=course_id)
+    #         courses_to_add.append(course)
+    #     user.courses.add(*courses_to_add)
+        
+    #     curriculums_to_add = []
+    #     for curriculum_id in user_item.get('Curriculum', []):
+    #         curriculum = Curriculum.objects.get(id_curriculum=curriculum_id)
+    #         curriculums_to_add.append(curriculum)
+    #     user.Curriculum.add(*curriculums_to_add)
+    #     user.save()
+        
     with open('data_example/user_data.json', 'r', encoding='utf-8') as file:
         user_data = json.load(file)
-    
+
     for user_item in user_data:
-        user = User.objects.get(id_user=user_item['id_user'])
+        user, created = User.objects.get_or_create(
+            id_user=user_item['id_user'],
+            defaults={
+                'email': user_item['email'],
+                'first_name': user_item['first_name'],
+                'last_name': user_item['last_name'],
+                'role': user_item['role']
+            }
+        )
+        if created:
+            user.set_password(user_item['password'])
+            user.save()
+        
         courses_to_add = []
         for course_id in user_item.get('courses', []):
-            course = Course.objects.get(id_course_main=course_id)
-            courses_to_add.append(course)
+            try:
+                course = Course.objects.get(id_course_main=course_id)
+                courses_to_add.append(course)
+            except Course.DoesNotExist:
+                print(f"Course with ID {course_id} not found.")
+
         user.courses.add(*courses_to_add)
         
         curriculums_to_add = []
         for curriculum_id in user_item.get('Curriculum', []):
-            curriculum = Curriculum.objects.get(id_curriculum=curriculum_id)
-            curriculums_to_add.append(curriculum)
+            try:
+                curriculum = Curriculum.objects.get(id_curriculum=curriculum_id)
+                curriculums_to_add.append(curriculum)
+            except Curriculum.DoesNotExist:
+                print(f"Curriculum with ID {curriculum_id} not found.")
+
         user.Curriculum.add(*curriculums_to_add)
         user.save()
-        
+
 if __name__ == '__main__':
     create_superuser()
     load_data()

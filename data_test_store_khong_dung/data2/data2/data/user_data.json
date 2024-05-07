@@ -1,0 +1,48 @@
+[
+    {
+        "id_user": "admin_id",
+        "role": 99,
+        "first_name": "Admin",
+        "last_name": "User",
+        "email": "admin@gmail.com",
+        "courses": [],
+        "Curriculum": [],
+        "password": "47f06ed0-6745-4bde-be6e-145ba50b1eca"
+    },
+    {
+        "id_user": "id_normal",
+        "role": 1,
+        "first_name": "Truong",
+        "last_name": "Duy",
+        "email": "truongdepchai@gmail.com",
+        "courses": [],
+        "Curriculum": [],
+        "password": "75b047eb-37a6-4482-99f1-f6dc894581e4"
+    },
+    {
+        "id_user": "id_admin",
+        "role": 33,
+        "first_name": "Truong",
+        "last_name": "Ho",
+        "email": "truong@gmail.com",
+        "courses": [
+            "id_course_nmlt"
+        ],
+        "Curriculum": [],
+        "password": "aa72d2e0-f417-4c66-91f6-3f14421b49af"
+    },
+    {
+        "id_user": "id_normal2",
+        "role": 1,
+        "first_name": "Truong",
+        "last_name": "Ngo",
+        "email": "truongdepchaiquadi@gmail.com",
+        "courses": [
+            "id_course_nmlt"
+        ],
+        "Curriculum": [
+            "id_curriculums_kt"
+        ],
+        "password": "f5451f50-8c74-4ae9-9062-1a99438ac04f"
+    }
+]

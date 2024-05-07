@@ -1,0 +1,19 @@
+[
+    {
+        "id_curriculum": "id_curriculums_kt",
+        "name": "Kĩ thuật",
+        "year": "2023",
+        "department": "xin chao moi nguoi",
+        "note": "xin chao moi nguoi",
+        "curriculum_course": [
+            {
+                "id_curriculumCourse": "id_currcourse_kt",
+                "mandatory": true,
+                "is_confirm": false,
+                "semester": 3,
+                "teacher": [],
+                "id_course": []
+            }
+        ]
+    }
+]

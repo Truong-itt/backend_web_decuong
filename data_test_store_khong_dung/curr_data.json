@@ -3,6 +3,8 @@
         "id_curriculum": "id_curriculums_kt",
         "name": "Kĩ thuật",
         "year": "2023",
+        "department": "Công nghệ thông tin",
+        "note": "Đây là khoa công nghệ thông tin",
         "curriculum_course": [
             {
                 "id_curriculumCourse": "id_currcourse_kt",
@@ -22,7 +24,8 @@
                         ],
                         "Curriculum": [
                             "id_curriculums_nm"
-                        ]
+                        ],
+                        "password": "id_gv_hung"
                     },
                     {
                         "id_user": "id_gv_linh",
@@ -37,7 +40,8 @@
                         "Curriculum": [
                             "id_curriculums_kt",
                             "id_curriculums_nm"
-                        ]
+                        ],
+                        "password": "id_gv_linh"
                     },
                     {
                         "id_user": "id_gv_Nam",
@@ -49,7 +53,8 @@
                             "id_course_ml",
                             "id_course_dstt"
                         ],
-                        "Curriculum": []
+                        "Curriculum": [],
+                        "password": "id_gv_Nam"
                     }
                 ],
                 "id_course": [
@@ -64,6 +69,8 @@
         "id_curriculum": "id_curriculums_nm",
         "name": "Nhập môn",
         "year": "2056",
+        "department": "Công nghệ thông tin",
+        "note": "Đây là khoa công nghệ thông tin",
         "curriculum_course": [
             {
                 "id_curriculumCourse": "id_currcourse_nm",
@@ -83,7 +90,8 @@
                         ],
                         "Curriculum": [
                             "id_curriculums_nm"
-                        ]
+                        ],
+                        "password": "id_gv_hung"
                     },
                     {
                         "id_user": "id_gv_tinh",
@@ -98,7 +106,8 @@
                         ],
                         "Curriculum": [
                             "id_curriculums_kt"
-                        ]
+                        ],
+                        "password": "id_gv_tinh"
                     }
                 ],
                 "id_course": [
@@ -112,6 +121,8 @@
         "id_curriculum": "id_curriculums_nc",
         "name": "Nâng cao",
         "year": "2023",
+        "department": "Công nghệ thông tin",
+        "note": "Đây là khoa công nghệ thông tin",
         "curriculum_course": [
             {
                 "id_curriculumCourse": "id_currcourse_nc",
@@ -131,7 +142,8 @@
                         ],
                         "Curriculum": [
                             "id_curriculums_nm"
-                        ]
+                        ],
+                        "password": "id_gv_hung"
                     },
                     {
                         "id_user": "id_gv_kien",
@@ -148,7 +160,8 @@
                             "id_curriculums_kt",
                             "id_curriculums_nm",
                             "id_curriculums_nc"
-                        ]
+                        ],
+                        "password": "id_gv_kien"
                     }
                 ],
                 "id_course": [
@@ -177,7 +190,8 @@
                             "id_curriculums_kt",
                             "id_curriculums_nm",
                             "id_curriculums_nc"
-                        ]
+                        ],
+                        "password": "id_gv_kien"
                     }
                 ],
                 "id_course": [

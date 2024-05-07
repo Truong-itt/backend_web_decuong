@@ -1,0 +1,95 @@
+[
+    {
+        "id_course_main": "id_course_nmlt",
+        "name": "Nhập môn lập trình",
+        "title": "Đây là title",
+        "number_credit": "45",
+        "document": "document",
+        "target": "target",
+        "description": "description",
+        "time_update": "xin chao moi nguoi",
+        "subject_pre": [
+            {
+                "name": "xin chao moi nguoi"
+            }
+        ],
+        "CLOs1": [
+            {
+                "order": 3,
+                "content": "xin chao moi nguoi",
+                "PLO": "xin chao moi nguoi"
+            }
+        ],
+        "CLOs2": [
+            {
+                "order": 3,
+                "a": "A",
+                "b": "B",
+                "c": "C",
+                "d": "D",
+                "e": "E",
+                "f": "F",
+                "g": "G",
+                "h": "H"
+            }
+        ],
+        "CLOs3": [
+            {
+                "order": 3,
+                "exam": "xin chao moi nguoi",
+                "method": "xin chao moi nguoi",
+                "point": "xin chao moi nguoi",
+                "criteria": "xin chao moi nguoi"
+            }
+        ],
+        "CLOs4": [],
+        "content": [
+            {
+                "order": 4,
+                "content": "xin chao moi nguoi",
+                "number_session": "xin chao moi nguoi",
+                "CLOs": "xin chao moi nguoi",
+                "method": "xin chao moi nguoi",
+                "self_study": "xin chao moi nguoi"
+            }
+        ],
+        "primary_teacher": [
+            {
+                "id_user": "id_normal2",
+                "role": 1,
+                "first_name": "Truong",
+                "last_name": "Ngo",
+                "email": "truongdepchaiquadi@gmail.com",
+                "courses": [
+                    "id_course_nmlt"
+                ],
+                "Curriculum": [
+                    "id_curriculums_kt"
+                ],
+                "password": "5333bb97-c8b7-4a76-b80a-084ea6372eaa"
+            }
+        ],
+        "head_department": [],
+        "teacher": [
+            {
+                "id_user": "id_normal2",
+                "role": 1,
+                "first_name": "Truong",
+                "last_name": "Ngo",
+                "email": "truongdepchaiquadi@gmail.com",
+                "courses": [
+                    "id_course_nmlt"
+                ],
+                "Curriculum": [
+                    "id_curriculums_kt"
+                ],
+                "password": "aad99a13-c7a2-4ca1-9376-41fc13348b89"
+            }
+        ],
+        "subject_similar": [
+            {
+                "name": "xin chao moi nguoi"
+            }
+        ]
+    }
+]

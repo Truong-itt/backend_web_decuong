@@ -1,0 +1,10 @@
+[
+    {
+        "id_curriculumCourse": "id_currcourse_kt",
+        "mandatory": true,
+        "is_confirm": false,
+        "semester": 3,
+        "teacher": [],
+        "id_course": []
+    }
+]
