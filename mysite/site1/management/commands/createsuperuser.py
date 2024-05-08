@@ -12,6 +12,8 @@ class Command(createsuperuser.Command):
         parser.add_argument('--lastname', type=str, help='Last name of the user')
         # id_user
         parser.add_argument('--id_user', type=str, help='Id of the user')
+        # department
+        parser.add_argument('--department', type=str, help='Department of the user')
 
     def handle(self, *args, **options):
         # role 
@@ -38,5 +40,10 @@ class Command(createsuperuser.Command):
         if not id_user:
             raise CommandError("Id_user is required")
         options['id_user'] = id_user
+        # department
+        department = options.get('department')
+        if not department:
+            raise CommandError("Department is required")
+        options['department'] = department        
         super().handle(*args, **options)
         

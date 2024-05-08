@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id_user', 'role', 'first_name', 'last_name', 'email', 'courses', 'Curriculum', 'curriculums_ids', 'courses_ids']
+        fields = ['id_user', 'role', 'first_name', 'last_name', 'email', 'courses', 'Curriculum', 'curriculums_ids', 'courses_ids', 'department']
 
     def create(self, validated_data):
         curriculums_data_list = validated_data.pop('curriculums_ids', [])
@@ -41,6 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.email = validated_data.get('email', instance.email)
         instance.role = validated_data.get('role', instance.role)
+        instance.department = validated_data.get('department', instance.department)
         #  khong thuc hiẹn update password
         instance.save()
         self._handle_associations(instance, curriculums_data_list, courses_data_list)
@@ -74,7 +75,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id_user', 'role', 'first_name', 'last_name', 'email', 'password')
+        fields = ('id_user', 'role', 'first_name', 'last_name', 'email', 'password','department')
         extra_kwargs = {'email': {'required': True}}  # Đảm bảo email là bắt buộc
 
     def validate_email(self, value):
@@ -91,6 +92,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             email=validated_data['email'],
+            department=validated_data['department'],
             password=validated_data['password']
         )
         return user

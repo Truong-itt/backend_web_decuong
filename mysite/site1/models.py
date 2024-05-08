@@ -4,10 +4,11 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.contrib.auth.models import BaseUserManager
 
 #  id_user , role, first_name, last_name, email, course, Curriculum, password
+#  bo xung truong department cho user kieu du lieu varchar
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self,id_user, email, first_name, last_name,role, password=None, **extra_fields):
+    def create_user(self,id_user, email, first_name, last_name,role, department, password=None, **extra_fields):
         if not id_user:
             raise ValueError('The given id_user must be set')
         if not email:
@@ -18,14 +19,15 @@ class UserManager(BaseUserManager):
             raise ValueError('Firstname must have')
         if not last_name:
             raise ValueError('Lastname must have a role')
-        
+        if not department:
+            raise ValueError('Department must have a role')
         email = self.normalize_email(email)
-        user = self.model(id_user=id_user,email=email, first_name=first_name, last_name=last_name, role = role, **extra_fields)
+        user = self.model(id_user=id_user,email=email, first_name=first_name, last_name=last_name, role = role, department=department,**extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, id_user, email, first_name, last_name, role, password=None, **extra_fields):
+    def create_superuser(self, id_user, email, first_name, last_name, role, department, password=None, **extra_fields):
         role = str(role)
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -34,7 +36,7 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-        return self.create_user(id_user, email, first_name, last_name, role, password, **extra_fields)
+        return self.create_user(id_user, email, first_name, last_name, role, department ,password, **extra_fields)
     
 class User(AbstractBaseUser, PermissionsMixin):
     id_user = models.CharField(max_length=100, primary_key=True, default='NO DATA')
@@ -45,6 +47,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     name_user = models.CharField(max_length=255, default='NO DATA')
     courses = models.ManyToManyField('Course', related_name='Course_user', blank=True)
     Curriculum = models.ManyToManyField('Curriculum', related_name='Curriculum_users', blank=True)
+    # bo xung deparment
+    department = models.CharField(max_length=255, blank=True, default='NO DATA')
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -52,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['id_user', 'role',
-                       'first_name', 'last_name']
+                       'first_name', 'last_name','department']
     
     def save(self, *args, **kwargs):
         if self.first_name != 'NO DATA' and self.last_name != 'NO DATA':
@@ -81,6 +85,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             'email': self.email,
             'courses': [course.id_course_main for course in self.courses.all()],
             'Curriculum': [curriculum.id_curriculum for curriculum in self.Curriculum.all()],
+            'department': self.department,
             'password': password,
         }
 # class User(models.Model):

@@ -27,11 +27,12 @@ def create_superuser():
     first_name = 'Admin'
     last_name = 'User'
     role = 99  # Ví dụ cho role của superuser
+    department = 'CNTT'
     password = '123456'
 
     # Kiểm tra xem superuser đã tồn tại chưa
     if not User.objects.filter(email=email).exists():
-        User.objects.create_superuser(id_user=id_user, email=email, first_name=first_name, last_name=last_name, role=role, password=password)
+        User.objects.create_superuser(id_user=id_user, email=email, first_name=first_name, last_name=last_name, role=role, department=department,password=password)
         print('Superuser created successfully.')
     else:
         print('Superuser already exists.')
@@ -66,6 +67,7 @@ def load_data():
                         'first_name': teacher_data['first_name'],
                         'last_name': teacher_data['last_name'],
                         'email': teacher_data['email'],
+                        'department': teacher_data['department'],
                         'password': teacher_data['password']
                     }
                 )
@@ -87,7 +89,8 @@ def load_data():
                     'first_name': teacher_data['first_name'],
                     'last_name': teacher_data['last_name'],
                     'email': teacher_data['email'],
-                    # 'password': teacher_data['password']
+                    'department': teacher_data['department'],
+                    'password': teacher_data['password']
                 }
             )
             if created:
@@ -104,7 +107,8 @@ def load_data():
                     'first_name': teacher_data['first_name'],
                     'last_name': teacher_data['last_name'],
                     'email': teacher_data['email'],
-                    # 'password': teacher_data['password']
+                    'department': teacher_data['department'],
+                    'password': teacher_data['password']
                 }
             )
             if created:
@@ -222,7 +226,8 @@ def load_data():
                     'first_name': teacher_data['first_name'],
                     'last_name': teacher_data['last_name'],
                     'email': teacher_data['email'],
-                    # 'password': teacher_data['password']
+                    'department': teacher_data['department'],
+                    'password': teacher_data['password']
                 }
             )
             if created:
@@ -319,9 +324,21 @@ def load_data():
                 'email': user_item['email'],
                 'first_name': user_item['first_name'],
                 'last_name': user_item['last_name'],
-                'role': user_item['role']
+                'department': user_item['department'],
+                'role': user_item['role'],
+                'password': user_item['password']
             }
         )
+        
+        
+        '''
+                   'role': teacher_data['role'],
+                    'first_name': teacher_data['first_name'],
+                    'last_name': teacher_data['last_name'],
+                    'email': teacher_data['email'],
+                    'department': teacher_data['department'],
+                    'password': teacher_data['password']
+        '''
         if created:
             user.set_password(user_item['password'])
             user.save()

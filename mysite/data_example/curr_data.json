@@ -25,6 +25,7 @@
                         "Curriculum": [
                             "id_curriculums_nm"
                         ],
+                        "department":"CNTT",
                         "password": "id_gv_hung"
                     },
                     {
@@ -41,6 +42,8 @@
                             "id_curriculums_kt",
                             "id_curriculums_nm"
                         ],
+                        "department":"CNTT",
+
                         "password": "id_gv_linh"
                     },
                     {
@@ -54,6 +57,8 @@
                             "id_course_dstt"
                         ],
                         "Curriculum": [],
+                        "department":"CNTT",
+
                         "password": "id_gv_Nam"
                     }
                 ],
@@ -91,6 +96,7 @@
                         "Curriculum": [
                             "id_curriculums_nm"
                         ],
+                        "department":"CNTT",
                         "password": "id_gv_hung"
                     },
                     {
@@ -107,6 +113,7 @@
                         "Curriculum": [
                             "id_curriculums_kt"
                         ],
+                        "department":"CNTT",
                         "password": "id_gv_tinh"
                     }
                 ],
@@ -143,6 +150,7 @@
                         "Curriculum": [
                             "id_curriculums_nm"
                         ],
+                        "department":"CNTT",
                         "password": "id_gv_hung"
                     },
                     {
@@ -161,6 +169,7 @@
                             "id_curriculums_nm",
                             "id_curriculums_nc"
                         ],
+                        "department":"CNTT",
                         "password": "id_gv_kien"
                     }
                 ],
@@ -191,6 +200,7 @@
                             "id_curriculums_nm",
                             "id_curriculums_nc"
                         ],
+                        "department":"CNTT",
                         "password": "id_gv_kien"
                     }
                 ],
