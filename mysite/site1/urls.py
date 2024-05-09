@@ -25,7 +25,7 @@ urlpatterns = [
     path('curriculumdeletechildchildview/<str:pk>', CurriculumDeleteChildChildView.as_view(), name='CurriculumDeleteChildChildView'),
     
     path('curriculumcourseview/', CurriculumCourseView.as_view(), name='CurriculumCourseView'),
-    path('curriculumcourseview/<str:pk>', CurriculumCourseDetailView.as_view(), name='CurriculumCourseView'),
+    path('curriculumcourseview/<str:pk>', CurriculumCourseDetailView.as_view(), name='CurriculumCourseViewDetailItem'),
     path('curriculumcoursedeletechild/<str:pk>', CurriculumCourseDeleteChild.as_view(), name='CurriculumCourseDeleteChild'),
 
     #  bo xung user token 
@@ -37,5 +37,6 @@ urlpatterns = [
     # search 
     path('searchuser/', search_user, name='search-user'),
     path('searchcurr/', SearchCurriculum.as_view(), name='search-user'),
+    path('searchcourse/', SearchCourse.as_view(), name='search-course'),
     
 ]

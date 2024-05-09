@@ -24,7 +24,6 @@ from rest_framework.parsers import JSONParser
 from django.utils.decorators import method_decorator
 
 
-
 User = get_user_model()
 
 logger = logging.getLogger(__name__)
@@ -49,6 +48,7 @@ class GetUserView(APIView):
         user = request.user
         serializer = UserSerializer(user)
         return Response(serializer.data, status=200)
+    
 class LoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
@@ -57,6 +57,28 @@ class LoginView(KnoxLoginView):
         user = serializer.validated_data['user']
         login(request, user)
         return super(LoginView, self).post(request, format=None)
+
+
+# class LoginView(KnoxLoginView):
+#     permission_classes = (permissions.AllowAny,)
+
+#     def post(self, request, format=None):
+#         serializer = AuthTokenSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data['user']
+#         login(request, user)
+
+        # Tạo token thông qua Knox
+        # Sử dụng UserSerializer để trả về dữ liệu người dùng
+        # Gộp dữ liệu người dùng và token vào cùng một response
+        # token[1] là chuỗi token, token[0] là đối tượng token
+        # token = AuthToken.objects.create(user)
+        # user_serializer = UserSerializer(user)
+        # data = {
+        #     'user': user_serializer.data,
+        #     'token': token[1]  
+        # }
+        # return Response(data, status=status.HTTP_200_OK)
     
 class UserRegistrationView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -72,8 +94,8 @@ class UserRegistrationView(APIView):
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST']) 
-@permission_classes([IsAuthenticated])
+@api_view(['POST'])     
+@permission_classes([AllowAny])
 def search_user(request):
     search_text = request.data.get('search_text', '')
     users = get_user_model().objects.filter(name_user__icontains=search_text)
@@ -81,8 +103,8 @@ def search_user(request):
     return Response(serializer.data)
 
 class SearchCurriculum(APIView):
-    # permission_classes = (permissions.AllowAny,)
-    permission_classes = [IsAuthenticated]
+    permission_classes = (permissions.AllowAny,)
+    # permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser]
     def post(self, request):
         search_text = request.data.get('search_text', '')  # Lấy dữ liệu từ body request
@@ -90,6 +112,17 @@ class SearchCurriculum(APIView):
         serializer = CurriculumSerializer(list_users, many=True)
         return Response(serializer.data)
     
+
+class SearchCourse(APIView):
+    permission_classes = (permissions.AllowAny,)
+    # permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser]
+    def post(self, request):
+        search_text = request.data.get('search_text', '')  # Lấy dữ liệu từ body request
+        list_users = Course.objects.filter(name__icontains=search_text)
+        serializer = CourseSerializer(list_users, many=True)
+        return Response(serializer.data)
+
 
 class UserCreateAPIView(APIView):
     #  lay toan bo user 

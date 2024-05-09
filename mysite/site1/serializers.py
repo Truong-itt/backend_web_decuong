@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id_user', 'role', 'first_name', 'last_name', 'email', 'courses', 'Curriculum', 'curriculums_ids', 'courses_ids', 'department']
+        fields = ['id_user', 'role', 'first_name', 'last_name', 'email', 'courses', 'Curriculum', 'curriculums_ids', 'courses_ids', 'department','name_user']
 
     def create(self, validated_data):
         curriculums_data_list = validated_data.pop('curriculums_ids', [])
@@ -523,12 +523,12 @@ class CurriculumCourseSerializer_DeleteChild(serializers.ModelSerializer):
         return super().update(instance, validated_data)
     
 class CourseSerializer_DeleteChild(serializers.ModelSerializer):
-    CLOs4_remove_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     subject_similar_remove_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     subject_pre_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     CLOs1_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     CLOs2_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     CLOs3_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
+    CLOs4_remove_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     content_removal_request = serializers.ListField(child=serializers.IntegerField(), required=False, write_only=True)
     primary_teacher_removal_request = serializers.ListField(child=serializers.CharField(), required=False, write_only=True)
     head_department_removal_request = serializers.ListField(child=serializers.CharField(), required=False, write_only=True)
