@@ -296,6 +296,8 @@ class CourseSerializer(serializers.ModelSerializer):
                             for key, value in item_data.items():
                                 setattr(item, key, value)
                             item.save()
+                        # add them vao khi no de ton tai trong db nhung chua ton tai trong course
+                        instance.subject_similar.add(item)
                     else:
                         item_data.pop('id_subjectsimilar', None)
                         new_item = SubjectPre.objects.create(**item_data)
@@ -312,6 +314,7 @@ class CourseSerializer(serializers.ModelSerializer):
                             for key, value in item_data.items():
                                 setattr(item, key, value)
                             item.save()
+                        instance.subject_pre.add(item)
                     else:
                         print("xin chao moi nguoi")
                         item_data.pop('id_subjectpre', None)   # dam bao cho id la None de cap nhat khong bi sai logic 
@@ -328,6 +331,7 @@ class CourseSerializer(serializers.ModelSerializer):
                             for key, value in item_data.items():
                                 setattr(item, key, value)
                             item.save()
+                        instance.CLOs1.add(item)
                     else:
                         item_data.pop('id_clos1', None)
                         new_item = CLOs1.objects.create(**item_data)
@@ -344,6 +348,7 @@ class CourseSerializer(serializers.ModelSerializer):
                             for key, value in item_data.items():
                                 setattr(item, key, value)
                             item.save()
+                        instance.CLOs2.add(item)
                     else:
                         item_data.pop('id_clos2', None)
                         new_item = CLOs2.objects.create(**item_data)
@@ -360,6 +365,7 @@ class CourseSerializer(serializers.ModelSerializer):
                             for key, value in item_data.items():
                                 setattr(item, key, value)
                             item.save()
+                        instance.CLOs3.add(item)
                     else:
                         item_data.pop('id_clos3', None)
                         new_item = CLOs3.objects.create(**item_data)
@@ -376,6 +382,7 @@ class CourseSerializer(serializers.ModelSerializer):
                             for key, value in item_data.items():
                                 setattr(item, key, value)
                             item.save()
+                        instance.CLOs4.add(item)
                     else:
                         item_data.pop('id_clos4', None)
                         new_item = CLOs4.objects.create(**item_data)
@@ -392,6 +399,7 @@ class CourseSerializer(serializers.ModelSerializer):
                             for key, value in item_data.items():
                                 setattr(item, key, value)
                             item.save()
+                        instance.content.add(item)
                     else:
                         item_data.pop('id_content', None)
                         new_item = Content.objects.create(**item_data)

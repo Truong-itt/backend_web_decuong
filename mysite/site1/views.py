@@ -10,7 +10,6 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 import logging
 
-
 from django.contrib.auth import login
 from rest_framework import permissions, viewsets
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -119,6 +118,7 @@ class SearchCourse(APIView):
     parser_classes = [JSONParser]
     def post(self, request):
         search_text = request.data.get('search_text', '')  # Lấy dữ liệu từ body request
+        # list_users = Course.objects.filter(name__icontains=Lower(search_text))
         list_users = Course.objects.filter(name__icontains=search_text)
         serializer = CourseSerializer(list_users, many=True)
         return Response(serializer.data)
