@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backendptud-v3:
+    image: duytruong7583/ptudbackend:webptud-v3
+    container_name: backendptud-v3
+    ports:
+      - "8000:8000"  # Bạn có thể thay đổi cổng này nếu cần
+    networks:
+      - backend_network
+
+  cloudflare:
+      image: cloudflare/cloudflared:latest
+      container_name: iuhkart-cloudflare
+      restart: unless-stopped
+      command: tunnel --no-autoupdate run --token eyJhIjoiODZlYTNjZjEwNmRlMTU3Yjc2NTg0YzgyODgyNDdmMTciLCJ0IjoiNTVjZGI5ZTYtNzZmYy00MGU1LWFmNDMtMDc3NWJmNDk3ZmNkIiwicyI6Ik16RTFPVFZpTjJFdE5qZG1aaTAwTldSaExXRmtPR0V0TWpJNU5HRmlNak5tTTJJMyJ9
+      networks:
+        - backend_network
+networks:
+  backend_network:
+    driver: bridge
